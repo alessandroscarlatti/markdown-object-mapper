@@ -1,4 +1,6 @@
-import com.scarlatti.Mapper
+package com.scarlatti
+
+import com.scarlatti.MarkdownMapper
 import org.junit.Test
 
 import java.nio.file.Files
@@ -11,12 +13,12 @@ import java.nio.file.Paths
  * /_/ |_/_/\__/___/___/\_,_/_//_/\_,_/_/  \___/ /___/\__/\_,_/_/ /_/\_,_/\__/\__/_/
  * Tuesday, 10/16/2018
  */
-class MapperTest {
+class MarkdownMapperTest {
 
     @Test
     void useMapperWithSingleField() {
         byte[] bytes = Files.readAllBytes(Paths.get("src/test/resources/test1.md"))
-        Instance instance = new Mapper().readValueAs(new String(bytes), Instance.class)
+        Instance instance = new MarkdownMapper().readValueAs(new String(bytes), Instance.class)
 
         assert instance != null
         assert instance.codeToMap != null
@@ -26,7 +28,20 @@ class MapperTest {
     @Test
     void useMapperWithTwoFields() {
         byte[] bytes = Files.readAllBytes(Paths.get("src/test/resources/test2.md"))
-        InstanceWithTwoFields instance = new Mapper().readValueAs(new String(bytes), InstanceWithTwoFields.class)
+        InstanceWithTwoFields instance = new MarkdownMapper().readValueAs(new String(bytes), InstanceWithTwoFields.class)
+
+        assert instance != null
+        assert instance.codeToMap != null
+        assert instance.codeToMap.contains("really, really long")
+        assert instance.moreCodeToMap != null
+        assert instance.moreCodeToMap.contains("isJson")
+    }
+
+    @Test
+    void mapToInstance() {
+        byte[] bytes = Files.readAllBytes(Paths.get("src/test/resources/test2.md"))
+        InstanceWithTwoFields instance = new InstanceWithTwoFields()
+        new MarkdownMapper().mapValueTo(new String(bytes), instance)
 
         assert instance != null
         assert instance.codeToMap != null

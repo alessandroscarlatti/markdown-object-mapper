@@ -1,3 +1,5 @@
+package com.scarlatti;
+
 import org.commonmark.node.AbstractVisitor;
 import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.Node;
