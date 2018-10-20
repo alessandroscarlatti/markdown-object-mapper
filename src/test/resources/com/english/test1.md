@@ -9,7 +9,8 @@ lazy
 dog
 ```
 
-> this example has mixed case
+> this example has mixed case and lots of code
+even more `even some of this`
 
 ## expectedResult
 ```text
@@ -20,7 +21,62 @@ DOG
 ```
 
 ## stuffAndThings
-<details><summary>expand/collapse</summary>
+<details open>
+
+```text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+```
+</details>
+
+
+## moreStuffAndMoreThings
+<details open>
 
 ```text
 deep text
