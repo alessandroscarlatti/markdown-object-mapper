@@ -19,8 +19,16 @@ class CalculatorTest {
     }
 
     @Test
-    void testUsingResources() {
+    void testUsingResourcesUsingCodeBlock() {
         TestData test = new MarkdownMapper().readResourceAs("/com/calculator/test1.md", TestData.class)
+        int result = new Calculator().add(test.val1, test.val2)
+        assert test.val1 != 0
+        assert result == test.result
+    }
+
+    @Test
+    void testUsingResourcesUsingParagraph() {
+        TestData test = new MarkdownMapper().readResourceAs("/com/calculator/test2.md", TestData.class)
         int result = new Calculator().add(test.val1, test.val2)
         assert test.val1 != 0
         assert result == test.result

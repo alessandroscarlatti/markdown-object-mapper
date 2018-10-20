@@ -1,17 +1,21 @@
 package com.scarlatti
 
 import org.apache.commons.beanutils.ConvertUtils
-import org.apache.commons.beanutils.ConvertUtilsBean2
 import org.apache.commons.beanutils.PropertyUtils
 import org.commonmark.node.AbstractVisitor
 import org.commonmark.node.Code
 import org.commonmark.node.FencedCodeBlock
 import org.commonmark.node.Heading
-import org.commonmark.node.IndentedCodeBlock
 import org.commonmark.node.Node
 import org.commonmark.node.Paragraph
 import org.commonmark.node.Text
 import org.commonmark.parser.Parser
+import org.commonmark.renderer.html.HtmlRenderer
+
+import javax.swing.text.MutableAttributeSet
+import javax.swing.text.html.HTML
+import javax.swing.text.html.HTMLEditorKit
+import javax.swing.text.html.parser.ParserDelegator
 
 /**
  * ______    __                         __           ____             __     __  __  _
@@ -78,6 +82,10 @@ class MarkdownMapper {
                             println(((Code) heading.getNext().getFirstChild()).getLiteral())
                             applyCodeBlock(headingName, (Code) heading.getNext().getFirstChild())
                         }
+
+                        if (heading.getNext() instanceof Paragraph && heading.getNext().getFirstChild() instanceof Text) {
+                            applyParagraphBlock(headingName, (Paragraph) heading.getNext())
+                        }
                     } else {
                         super.visit(heading)
                     }
@@ -93,8 +101,45 @@ class MarkdownMapper {
 
         private void applyCodeBlock(String propertyName, Code codeBlock) {
             if (PropertyUtils.isWriteable(instance, propertyName)) {
-                Class<?> propertyClass = PropertyUtils.getSimpleProperty(instance, propertyName).getClass()
+                Class<?> propertyClass = PropertyUtils.getPropertyType(instance, propertyName)
                 Object val = ConvertUtils.convert(codeBlock.literal, propertyClass)
+                PropertyUtils.setSimpleProperty(instance, propertyName, val)
+            }
+        }
+
+        private void applyParagraphBlock(String propertyName, Paragraph paragraphBlock) {
+            // parse the text
+            final StringBuilder sb = new StringBuilder();
+            HTMLEditorKit.ParserCallback parserCallback = new HTMLEditorKit.ParserCallback() {
+                public boolean readyForNewline;
+
+                @Override
+                public void handleText(final char[] data, final int pos) {
+                    String s = new String(data);
+                    sb.append(s.trim());
+                    readyForNewline = true;
+                }
+
+                @Override
+                public void handleStartTag(final HTML.Tag t, final MutableAttributeSet a, final int pos) {
+                    if (readyForNewline && (t == HTML.Tag.DIV || t == HTML.Tag.BR || t == HTML.Tag.P)) {
+                        sb.append("\n");
+                        readyForNewline = false;
+                    }
+                }
+
+                @Override
+                public void handleSimpleTag(final HTML.Tag t, final MutableAttributeSet a, final int pos) {
+                    handleStartTag(t, a, pos);
+                }
+            };
+            String html = HtmlRenderer.builder().build().render(paragraphBlock)
+            new ParserDelegator().parse(new StringReader(html), parserCallback, false)
+
+            // set the property value
+            if (PropertyUtils.isWriteable(instance, propertyName)) {
+                Class<?> propertyClass = PropertyUtils.getPropertyType(instance, propertyName)
+                Object val = ConvertUtils.convert(sb.toString(), propertyClass)
                 PropertyUtils.setSimpleProperty(instance, propertyName, val)
             }
         }
