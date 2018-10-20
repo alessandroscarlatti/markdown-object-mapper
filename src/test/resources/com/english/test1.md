@@ -18,3 +18,57 @@ JUMPED OVER THE
 LAZY
 DOG
 ```
+
+## stuffAndThings
+<details><summary>expand/collapse</summary>
+
+```text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+deep text
+```
+</details>
